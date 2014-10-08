@@ -1,5 +1,7 @@
 <?php
-require_once(dirname(__FILE__).'/twitter-client.php');
+
+require_once('twitter-client.php');
+
 
 class Tweet {
         
@@ -58,7 +60,7 @@ class Tweet {
     }
     
     protected function processTweet($tweets) {
-        
+  
         $results=array();
         foreach($tweets['statuses'] as $tweet) { //foreach of the tweets that we received
                     $results[]=array( //add the tweet message in the results
@@ -68,10 +70,46 @@ class Tweet {
                         'url'=>'https://twitter.com/'.$tweet['user']['name'].'/status/'.$tweet['id_str'],
                     );
                 }
+       
+
         
         unset($tweets);        
         return $results;
     }
 }
 
-  
+require_once('semantria/session.php');
+
+
+class SessionCallbackHandler extends \Semantria\CallbackHandler
+{
+    function onRequest($sender, $args)
+    {
+        //$s = json_encode($args);
+        //echo "REQUEST: ", htmlspecialchars($s), "\r\n";
+    }
+
+    function onResponse($sender, $args)
+    {
+        //$s = json_encode($args);
+        //echo "RESPONSE: ", htmlspecialchars($s), "\r\n";
+    }
+
+    function onError($sender, $args)
+    {
+        $s = json_encode($args);
+        echo "ERROR: ", htmlspecialchars($s), "\r\n";
+    }
+
+    function onDocsAutoResponse($sender, $args)
+    {
+        //$s = json_encode($args);
+        //echo "DOCS AUTORESPONSE: ", htmlspecialchars($s), "\r\n";
+    }
+
+    function onCollsAutoResponse($sender, $args)
+    {
+        //$s = json_encode($args);
+        //echo "COLLS AUTORESPONSE: ", htmlspecialchars($s), "\r\n";
+    }
+}
