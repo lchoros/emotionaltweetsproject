@@ -35,38 +35,22 @@
                     <td>User</td>
                     <td>Text</td>
                 </tr>
-    <?php
-    require_once('semantria/session.php');
-
-    // Initializes new session with the serializer object and the keys.
-    $session = new \Semantria\Session(SEMANTRIA_CONSUMER_KEY, SEMANTRIA_CONSUMER_SECRET, NULL, NULL, TRUE);
-
-    // Initialize session callback handler
-    $callback = new SessionCallbackHandler();
-    $session->setCallbackHandler($callback);
-    foreach ($results as $tweet) {
-        $doc = array("id" => uniqid(''), "text" => $tweet['text']);
-
-        // Queues document for processing on Semantria service
-        $status = $session->queueDocument($doc);
-        // Check status from Semantria service
-        if ($status == 202) {
-            echo "Document ", $doc["id"], " queued successfully.", "\r\n";
-        }
-        ?>
+                <?php
+                foreach ($results as $tweet) {
+                    ?>
                     <tr>
                         <td><?php echo $tweet['user']; ?></td>
                         <td><?php echo $tweet['text']; ?></td>
 
                     </tr>
-        <?php
-    }
-    ?> 
+                    <?php
+                }
+                ?> 
 
             </table>
-                <?php
-            }
-            ?>
+            <?php
+        }
+        ?>
 
     </body>
 </html>
