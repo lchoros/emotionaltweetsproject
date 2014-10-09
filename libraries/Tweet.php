@@ -73,11 +73,12 @@ class Tweet {
                 'url' => 'https://twitter.com/' . $tweet['user']['name'] . '/status/' . $tweet['id_str'],
             );
 
-            list($doc, $status) = $this->addTwetsToQue($tweet, $session);
+            list($doc, $status) = $this->addTweetsToQue($tweet, $session);
         }
         $scores = $this->processQueuedTweets($doc, $session);
-
+        
         $this->checkSentimentScore($scores);
+        
         echo "\r\n";
         unset($tweets);
         return $results;
@@ -101,7 +102,7 @@ class Tweet {
      * @param $session
      * @return array
      */
-    protected function addTwetsToQue($tweet, $session) {
+    protected function addTweetsToQue($tweet, $session) {
         $doc = array("id" => uniqid(''), "text" => $tweet['text']);
 
         // Queues document for processing on Semantria service
@@ -125,11 +126,7 @@ class Tweet {
         $scores = array();
 
         while (count($scores) < $length) {
-            echo "Please wait 10 sec for documents ...", "\r\n";
-            // As Semantria isn't real-time solution you need to wait some time before getting of the processed results
-            // In real application here can be implemented two separate jobs, one for queuing of source data another one for retreiving
-            // Wait ten seconds while Semantria process queued document
-            sleep(10);
+            echo "Please wait for documents ...", "\r\n";
 
             // Requests processed results from Semantria service
             $status = $session->getProcessedDocuments();
@@ -162,6 +159,7 @@ class Tweet {
                 echo "\n";
             }
         }
+
     }
 
 }

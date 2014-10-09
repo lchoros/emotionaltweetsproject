@@ -1,5 +1,5 @@
-#logo h2 { 
+#header logo h2 { 
    font-family: 'Irish Grover', 
-    cursive; font-size: 48px; text-align: center; line-height: 110px;
+    cursive; font-size: px; text-align: center; line-height: 110px;
     border-bottom: 0.5px solid #ff0000;}
 #header h2 a { color: #000; }

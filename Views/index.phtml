@@ -1,51 +1,72 @@
 <?php require('template/header.phtml') ?>
-<section id="body" class="container">
-<body>
+<section id="main">
+    <section id="body" class="container">
         <h1>Twitter Sentiment Analysis</h1>
-        <p>Type keyword:</p>
-        <form method="GET">
-            <label>Keyword: </label> <input type="text" name="q" /> 
-            <input type="submit" />
-        </form>
+        <p>Type your keyword below: <p>
+        <form method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-1">Keyword: </label> <input type="text" name="q" class="col-md-3" /> 
+            </div>
+            <div class="form-group">
+                <input type="submit" value="start" class="btn btn-info btn-lg col-md-offset-3" />
+
+                <?php
+                if (strlen($_POST['q']) > 150) {
+                    echo "Maximum 150 characters";
+                }
+                ?> </div
+        </form> 
 
         <?php
-        if (isset($_GET['q']) && $_GET['q'] != '') {
+        if (isset($_POST['q']) && !empty($_POST['q']) && strlen($_POST['q']) < 150) {
+
             require_once ('config.php');
             require_once ('libraries/Tweet.php');
 
             $Tweet = new Tweet(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCESS_KEY, TWITTER_ACCESS_SECRET);
 
+
             //Search Tweets parameters as described at https://dev.twitter.com/docs/api/1.1/get/search/tweets
             $tweetSearchParams = array(
-                'q' => $_GET['q'],
+                'q' => $_POST['q'],
                 'lang' => 'en',
-                'count' => 10,
+                'count' => 5,
             );
+
             $results = $Tweet->fetchTweets($tweetSearchParams);
+           
             ?>
-            <h2>Search results: "<?php echo $_GET['q']; ?>"</h2>
-            <table border="1">
-                <tr>
-                    <td>User</td>
-                    <td>Text</td>
-                </tr>
+            <h4>Search results: "<?php echo $_POST['q']; ?>"</h4>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-condesened table-bordered">
+                    <tr>
+                        <td>User</td>
+                        <td>Text</td>
+                        <td>Sentiment</td>
+                    </tr>
+
                 <?php
+                }
+
                 foreach ($results as $tweet) {
                     ?>
                     <tr>
                         <td><?php echo $tweet['user']; ?></td>
                         <td><?php echo $tweet['text']; ?></td>
-
                     </tr>
                     <?php
                 }
                 ?> 
 
             </table>
-            <?php
-        }
-        ?>
 
-    </body>
+        </div>
+    </section>
+</section>
+</br>
+</br>
+</br>
+<hr />
+
 <?php require('template/footer.phtml') ?>
 
